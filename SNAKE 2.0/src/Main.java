@@ -24,7 +24,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
+/* TODO
+ * NO snake understands portals
+ * add online LAN multiplier
+ * make game focusable,
+ * make buttons in add snake focusable
+ * Twin snake
+ * tweak the glitch Snake
+ * 
+ * add JUMBO Snake
+ * 3D?
+ * 4D? probably 3d itself is to complicated to play
+ * 
+ */
 public class Main implements ComponentListener, ItemListener, Runnable {
 	private JFrame frame, frm_option, frm_hlp;
 	private JPanel panel, pnl_option, pnl_hlp;
@@ -35,6 +47,7 @@ public class Main implements ComponentListener, ItemListener, Runnable {
 			chkbx_portal, chkbx_multiportal, chkbx_onLANe, chkbx_dirAstnce;
 	private JButton btn_StrtGme, btn_Hlp, btn_JnGme, btn_addSnake, btn_snakemade, btn_cnclsnkmk, btn_up, btn_down, btn_right, btn_left;
 	private JLabel lbl_pix, lbl_row, lbl_col, lbl_option, lbl_preview, lbl_nam, lbl_snktyps, lbl_snkskins;
+	private Font normalf = new Font("arial", Font.PLAIN, 14);
 	private Dimension windowSize, screenSize;
 	private Toolkit tkit =Toolkit.getDefaultToolkit();
 	private Image Gameicon;
@@ -203,14 +216,14 @@ public class Main implements ComponentListener, ItemListener, Runnable {
 		chkbx_portal.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				chkbx_portal.setToolTipText(((e.getStateChange()%2==0)?"Click to add teleportaion portals":"Teleportaion Portal: ENABLED"));
+				if (!chkbx_portal.isSelected()) chkbx_multiportal.setSelected(false);
+				chkbx_multiportal.setVisible(chkbx_portal.isSelected());
 			}
 		});
 		chkbx_multiportal.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				chkbx_multiportal.setToolTipText(((e.getStateChange()%2==0)?"Click to add effects to portals":"Portals have special effects"));
 				chkbx_multiportal.setVisible(chkbx_portal.isSelected());
-				chkbx_multiportal.setVisible(chkbx_portal.isSelected());
-				chkbx_multiportal.setSelected(chkbx_portal.isSelected());
 			}
 		});
 		chkbx_onLANe.addItemListener(new ItemListener() {
@@ -234,15 +247,61 @@ public class Main implements ComponentListener, ItemListener, Runnable {
 	}
 	
 	public void helpSetup(){
-		frm_option = new JFrame("HELP");
-		pnl_option = new JPanel(){
+		frm_hlp = new JFrame("HELP");
+		pnl_hlp = new JPanel(){
 			private static final long serialVersionUID = 12L;
-			//TODO
+			@Override
+			protected void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.setColor(Color.WHITE);
+				int ofst=3;
+				g.setFont(normalf);
+				g.drawString("            There are 5 Snakes:", 10, 15);
+				g.drawString("Player Snake:  You and your friends", 10, 30);
+				g.drawString("Computer Snake:  Basic AI", 10, 45);
+				g.drawString("GHOST Snake:  hovers around the apple, eats other snakes", 10, 60);
+				g.drawString("Splitter Snake:  When reaching length 6, it splits", 10, 75);
+				g.drawString("Glitch Snake:  Motives Unclear, GLITCHES", 10, 90);
+				g.drawString("            There are Portals:", 10, 105);
+				g.drawString("Normal: go in oneside, come out the other", 10, 120);
+				g.drawString("Reverse: go in one direction, come out in the opposite direction", 10, 135);
+				g.drawString("Clockwise: rotates you clockwise when leaving a portal", 10, 150);
+				g.drawString("Anticlockwise: rotates you anticlockwise when leaving a portal", 10, 165);
+				g.drawString("When the border  is diabled, the wals wrap around", 10, 180);
+				g.drawString("PRESS SPACE: when a snake dies, it can come back", 10, 195);
+				g.drawString("PRESS SLASH: for a hard reset/pause", 10, 210);
+				g.setColor(Color.RED);
+				g.drawString("Enter Snake name, Hit TAB, now u can click on the buttons", 10, 225);
+				g.drawString(" and press the coresponding key for the direction", 10, 240);
+				g.drawString("When game starts, Alt+Tab out and back in, then it works", 10, 255);
+			}
 		};
+		JButton btn_back =new JButton("BACK");
+		pnl_hlp.setFocusable(true);
+		pnl_hlp.setFocusTraversalKeysEnabled(false);
+		frm_hlp.setSize(frameW, frameH);
+		frm_hlp.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		pnl_hlp.setBackground(Color.BLACK);
+		frm_hlp.add(pnl_hlp);
+		pnl_hlp.setLayout(null);
+		btn_back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btn_Hlp.setVisible(true);
+				frm_hlp.dispose();
+			}
+		});
+		
+		btn_back.setFocusable(false);		
+		pnl_hlp.add(btn_back);
+		helpSetUpPosOfComponetz(btn_back);
+		
+		frm_hlp.setVisible(true);
+		frm_hlp.setResizable(false);
+		pnl_hlp.repaint();
 	}
 	
-	public void helpSetUpPosOfComponetz(){
-		//TODO
+	public void helpSetUpPosOfComponetz(JButton btn_back){
+		btn_back.setBounds(200, 320, 100, 25);
 	}
 	
 	public void previewSetup(){
@@ -504,15 +563,7 @@ public class Main implements ComponentListener, ItemListener, Runnable {
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (chkbx_portal.isSelected())chkbx_multiportal.setVisible(true);
-		else {
-			chkbx_multiportal.setVisible(false);
-			chkbx_multiportal.setSelected(false);
-		}
-		
-		System.out.println("JAMESSS");
-	}
+	public void itemStateChanged(ItemEvent e) {}
 
 	@Override
 	public void run() {

@@ -12,7 +12,7 @@ public class Computer extends Snake{
 
 	@Override
 	protected void updateDirection() {
-		if (Math.random() < 0.03 || !isAdult)idiling();
+		if (Math.random() < 0.03 )idiling();//made AI a little dumb
 		else tracker(GameBoard.enemy);
 	}
 
@@ -48,7 +48,7 @@ public class Computer extends Snake{
 						&& Math.abs(target.x - head().x) > GameBoard.colno / 2 && !GameBoard.border))
 			direction = (target.x > head().x) ? ((Math.abs(target.x - head().x) <= GameBoard.colno / 2 || GameBoard.border) ? 2 : 4)
 					: ((Math.abs(target.x - head().x) <= GameBoard.colno / 2 || GameBoard.border) ? 4 : 2);
-		else
+		else 
 			idiling();
 	}
 }

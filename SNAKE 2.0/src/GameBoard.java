@@ -332,9 +332,9 @@ public class GameBoard extends JPanel implements KeyListener, ActionListener {
 			return;
 		}
 		for(Snake snake: snakeList){
-			if(snake.isAdult||snake==currSnake)continue;
-			if(snake.tail().y>=rowno)return;
-		}
+			if(snake.isAdult||snake==currSnake)continue;// dont bother checking if snake is adult or currSnake
+			if(snake.tail().y>=rowno)return;// return if there is a snake(not currSnake) in the respawn chamber 
+		}//if reached her,currSnakeis not the babyAND there is no other baby snake in the chamber
 		if(babyID>=0&&snakeList.get(babyID).tail().y<rowno)snakeList.get(babyID).isAdult=true;
 		babyID=currSnake.ID;
 		for(int i=0;i<3;i++)currSnake.pt(i).setPoint(i+1,rowno+1);

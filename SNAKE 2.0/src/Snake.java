@@ -115,7 +115,7 @@ public class Snake {
 		isTwin = false;
 		isSpliter = false;
 		isGlitched = false;
-		isDuplicate=false;
-		isAdult=false;
+		isDuplicate = false;
+		isAdult = false;
 	}
 }
